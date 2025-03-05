@@ -1,0 +1,17 @@
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-03-05T07:58:24.177Z"}
+{"level":"info","message":"Connected to MongoDB","service":"identity-service","timestamp":"2025-03-05T07:58:25.945Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-03-05T07:58:29.491Z"}
+{"level":"info","message":"Request body: {\"username\":\"mann\",\"email\":\"manassehameyow@gmail.com\",\"password\":\"1234567\"}","service":"identity-service","timestamp":"2025-03-05T07:58:29.491Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-03-05T07:58:29.493Z"}
+{"level":"warn","message":"User already exists","service":"identity-service","timestamp":"2025-03-05T07:58:29.672Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-03-05T07:58:47.106Z"}
+{"level":"info","message":"Request body: {\"username\":\"mann\",\"email\":\"manassehameyow@gmail.com\",\"password\":\"1234567\"}","service":"identity-service","timestamp":"2025-03-05T07:58:47.107Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-03-05T07:58:47.108Z"}
+{"buffer":{"data":[103,200,4,55,138,97,172,113,236,192,136,116],"type":"Buffer"},"level":"warn","message":"User saved successfully","service":"identity-service","timestamp":"2025-03-05T07:58:47.505Z"}
+{"_message":"RefreshToken validation failed","errors":{"user":{"kind":"required","message":"Path `user` is required.","name":"ValidatorError","path":"user","properties":{"message":"Path `user` is required.","path":"user","type":"required"}}},"level":"error","message":"Registration error occured RefreshToken validation failed: user: Path `user` is required.","service":"identity-service","stack":"ValidationError: RefreshToken validation failed: user: Path `user` is required.\n    at Document.invalidate (/Users/manassehameyow/Desktop/New Projects /social-media-microservice/identity-service/node_modules/mongoose/lib/document.js:3329:32)\n    at /Users/manassehameyow/Desktop/New Projects /social-media-microservice/identity-service/node_modules/mongoose/lib/document.js:3090:17\n    at /Users/manassehameyow/Desktop/New Projects /social-media-microservice/identity-service/node_modules/mongoose/lib/schemaType.js:1407:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:85:11)","timestamp":"2025-03-05T07:58:47.509Z"}
+{"level":"info","message":"Identity service running on port 3001","service":"identity-service","timestamp":"2025-03-05T07:59:36.398Z"}
+{"level":"info","message":"Connected to MongoDB","service":"identity-service","timestamp":"2025-03-05T07:59:37.987Z"}
+{"level":"info","message":"Received POST request to /api/auth/register","service":"identity-service","timestamp":"2025-03-05T07:59:57.348Z"}
+{"level":"info","message":"Request body: {\"username\":\"mann\",\"email\":\"manassehameyow@gmail.com\",\"password\":\"1234567\"}","service":"identity-service","timestamp":"2025-03-05T07:59:57.349Z"}
+{"level":"info","message":"Registration endpoint hit...","service":"identity-service","timestamp":"2025-03-05T07:59:57.351Z"}
+{"buffer":{"data":[103,200,4,125,183,225,242,15,223,70,11,218],"type":"Buffer"},"level":"warn","message":"User saved successfully","service":"identity-service","timestamp":"2025-03-05T07:59:57.747Z"}

@@ -1,14 +1,14 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const logger = require("./utils/logger");
+const logger = require("./utils/logger.js");
 const express = require("express");
 const hemlet = require("helmet");
 const { RateLimiterRedis } = require("rate-limiter-flexible");
 const Redis = require("ioredis");
 const { rateLimit } = require("express-rate-limit");
 const { RedisStore } = require("rate-limit-redis");
-const routes = require("./routes/identity-service");
-const errorHandler = require("./middleware/error-handler");
+const routes = require("./routes/identity-service.js");
+const errorHandler = require("./middleware/errorHandler.js");
 
 const cors = require("cors");
 
@@ -66,7 +66,7 @@ const sensitiveEndpointLimiter = rateLimit({
     logger.warn(`Rate limit for IP ${req.ip} exceeded on sensitive endpoint`);
     res.status(429).send("Too many requests");
   },
-  store: new Redis({
+  store: new RedisStore({
     sendCommand: (...args) => redisClient.call(...args),
   }),
 });
