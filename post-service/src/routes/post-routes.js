@@ -7,6 +7,6 @@ const router = express.Router()
 //middleware -> this will tell if the user is an auth or not
 router.use(authenticateRequest)
 
-router.post('/create',createPost)
+router.post('/create-post',createPost)
 
 module.exports = router
