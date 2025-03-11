@@ -51,12 +51,12 @@ const sensitiveEndpointLimiter = rateLimit({
 });
 
 //apply sensitive endpoint rate limiting to sensitive endpoints
-app.use("/api/post/create-post", sensitiveEndpointLimiter);
+// app.use("/api/post/create-post", sensitiveEndpointLimiter);
 
 //routes -> pass redisclient to routes
 app.use(
   "/api/posts",
-  (req, res) => {
+  (req, res,next) => {
     req.redisClient = redisClient;
     next();
   },
