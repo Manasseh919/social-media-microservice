@@ -1,8 +1,10 @@
-const Post = require('../models/Post');
+
+
+const Post = require("../models/Post");
 const logger = require('../utils/logger');
 
 
-export const createPost = async(req,res) =>{
+ const createPost = async(req,res) =>{
     try {
         const {content,mediaIds} = req.body
         const newlyCreatedPost = new Post({
@@ -29,7 +31,7 @@ export const createPost = async(req,res) =>{
 }
 
 
-export const getAllPost = async(req,res) =>{
+ const getAllPost = async(req,res) =>{
     try {
         
     } catch (error) {
@@ -42,7 +44,7 @@ export const getAllPost = async(req,res) =>{
 }
 
 
-export const getPost = async(req,res) =>{
+ const getPost = async(req,res) =>{
     try {
         
     } catch (error) {
@@ -53,7 +55,7 @@ export const getPost = async(req,res) =>{
         });
     }
 }
-export const deletePost = async(req,res) =>{
+ const deletePost = async(req,res) =>{
     try {
         
     } catch (error) {
@@ -64,3 +66,5 @@ export const deletePost = async(req,res) =>{
         });
     }
 }
+
+module.exports = {createPost,getAllPost,getPost,deletePost}

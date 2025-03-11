@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const logger = require("./utils/logger.js");
 const express = require("express");
-const hemlet = require("helmet");
+const helmet = require("helmet");
 const { RateLimiterRedis } = require("rate-limiter-flexible");
 const Redis = require("ioredis");
 const { rateLimit } = require("express-rate-limit");
@@ -27,7 +27,7 @@ mongoose
 
 const redisClient = new Redis(process.env.REDIS_URL);
 
-app.use(hemlet());
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
