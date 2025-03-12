@@ -1,13 +1,14 @@
 const Post = require("../models/Post");
 const logger = require("../utils/logger");
 const { validatePost } = require("../utils/validation");
+const {invalidatePostCache} = require("../utils/invalidateCache")
 
-async function invalidatePostCache(req, input) {
-  const keys = await req.redisClient.keys("posts:*");
-  if (keys.length > 0) {
-    await req.redisClient.del(keys);
-  }
-}
+// async function invalidatePostCache(req, input) {
+//   const keys = await req.redisClient.keys("posts:*");
+//   if (keys.length > 0) {
+//     await req.redisClient.del(keys);
+//   }
+// }
 
 const createPost = async (req, res) => {
   logger.info("Create Post endpoint hit...");
@@ -29,7 +30,7 @@ const createPost = async (req, res) => {
       mediaIds: mediaIds || [],
     });
     await newlyCreatedPost.save();
-    await invalidatePostCache(req, newlyCreatedPost._id.toString());
+    await invalidatePostCache(req, null);
     logger.info("Post created successfully", newlyCreatedPost);
     res.status(201).json({
       success: true,
@@ -46,6 +47,7 @@ const createPost = async (req, res) => {
 };
 
 const getAllPost = async (req, res) => {
+  logger.info("Get all Post endpoint hit...");
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -84,6 +86,7 @@ const getAllPost = async (req, res) => {
 };
 
 const getPost = async (req, res) => {
+  logger.info("Get single Post endpoint hit...");
   try {
     const postId = req.params.id;
     const cacheKey = `post:${postId}`;
@@ -117,8 +120,38 @@ const getPost = async (req, res) => {
 };
 const deletePost = async (req, res) => {
   try {
+    const postId = req.params.id;
+
+    // Check if the post exists before deleting
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    // Optional: Ensure only the owner can delete their post
+    if (post.user.toString() !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized to delete this post",
+      });
+    }
+
+    // Delete the post
+    await Post.findByIdAndDelete(postId);
+
+    // Invalidate cache to ensure consistency
+    await invalidatePostCache(req, postId);
+
+    logger.info(`Post deleted successfully: ${postId}`);
+    res.status(200).json({
+      success: true,
+      message: "Post successfully deleted",
+    });
   } catch (error) {
-    logger.error("Error Getting post", error);
+    logger.error("Error deleting post", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
