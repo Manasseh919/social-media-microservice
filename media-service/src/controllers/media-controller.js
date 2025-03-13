@@ -12,10 +12,10 @@ const uploadMedia = async (req, res) => {
         message: "no file found. Please try adding a file and try again",
       });
     }
-    const { originalName, mimeType, buffer } = req.file;
+    const { originalname, mimetype, buffer } = req.file;
     const userId = req.user.userId;
 
-    logger.info(`File details: nmae=${originalName}, type=${mimeType}`);
+    logger.info(`File details: nmae=${originalname}, type=${mimetype}`);
     logger.info(`Uploading to cloudinary starting...`);
 
     const cloudinaryUploadResult = await uploadMediaToCloudinary(req.file);
@@ -25,8 +25,8 @@ const uploadMedia = async (req, res) => {
 
     const newlyCreatedMedia = new Media({
       publicId: cloudinaryUploadResult.public_id,
-      originalName,
-      mimeType,
+      originalName : originalname,
+      mimeType:mimetype,
       url: cloudinaryUploadResult.secure_url,
       userId,
     });
@@ -42,7 +42,7 @@ const uploadMedia = async (req, res) => {
     logger.error("Error uploading  media", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      message: "Error uploading media",
     });
   }
 };
