@@ -1,7 +1,8 @@
 const Post = require("../models/Post");
 const logger = require("../utils/logger");
 const { validatePost } = require("../utils/validation");
-const {invalidatePostCache} = require("../utils/invalidateCache")
+const {invalidatePostCache} = require("../utils/invalidateCache");
+const { publishEvent } = require("../utils/rabbitmq");
 
 // async function invalidatePostCache(req, input) {
 //   const keys = await req.redisClient.keys("posts:*");
@@ -141,6 +142,17 @@ const deletePost = async (req, res) => {
 
     // Delete the post
     await Post.findByIdAndDelete(postId);
+
+
+    //publish post delete method ->
+    await publishEvent('post.deleted',
+      {
+        postId:post._id.toString(),
+        userId:req.user.userId,
+        mediaIds:post.mediaIds
+
+      }
+    )
 
     // Invalidate cache to ensure consistency
     await invalidatePostCache(req, postId);
