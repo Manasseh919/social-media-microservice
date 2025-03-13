@@ -130,7 +130,6 @@ app.listen(PORT, () => {
     `Identity Service IS running at: ${process.env.IDENTITY_SERVICE_URL}`
   );
   logger.info(`Post Service IS running at: ${process.env.POST_SERVICE_URL}`);
-  logger.info(`Post Service IS running at: ${process.env.POST_SERVICE_URL}`);
   logger.info(`Media Service IS running at: ${process.env.MEDIA_SERVICE_URL}`);
   logger.info(`Redis is running at: ${process.env.REDIS_URL}`);
 });
