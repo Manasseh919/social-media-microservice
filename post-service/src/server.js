@@ -9,6 +9,7 @@ const { RedisStore } = require("rate-limit-redis");
 const postRoutes = require("./routes/post-routes");
 const errorHandler = require("./middleware/errorHandler");
 const logger = require("./utils/logger");
+const { connectToRabbitMQ } = require("./utils/rabbitmq");
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -56,7 +57,7 @@ const sensitiveEndpointLimiter = rateLimit({
 //routes -> pass redisclient to routes
 app.use(
   "/api/posts",
-  (req, res,next) => {
+  (req, res, next) => {
     req.redisClient = redisClient;
     next();
   },
@@ -66,9 +67,20 @@ app.use(
 //error handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  logger.info(`Post service running on port ${PORT}`);
-});
+async function startServer() {
+  try {
+    await connectToRabbitMQ();
+
+    app.listen(PORT, () => {
+      logger.info(`Post service running on port ${PORT}`);
+    });
+  } catch (error) {
+    logger.error("Failed to connect to server");
+    process.exit(1);
+  }
+}
+
+startServer();
 
 //unhandled promise rejection
 process.on("unhandledRejection", (reason, promise) => {
