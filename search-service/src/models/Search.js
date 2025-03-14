@@ -28,7 +28,7 @@ const searchPostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-searchPostSchema.index({ content: "text" });
+searchPostSchema.index({ title: "text" });
 searchPostSchema.index({ createdAt: -1 });
 
 const Search = mongoose.model("Search", searchPostSchema);
