@@ -1,15 +1,8 @@
 const Post = require("../models/Post");
 const logger = require("../utils/logger");
 const { validatePost } = require("../utils/validation");
-const {invalidatePostCache} = require("../utils/invalidateCache");
+const { invalidatePostCache } = require("../utils/invalidateCache");
 const { publishEvent } = require("../utils/rabbitmq");
-
-// async function invalidatePostCache(req, input) {
-//   const keys = await req.redisClient.keys("posts:*");
-//   if (keys.length > 0) {
-//     await req.redisClient.del(keys);
-//   }
-// }
 
 const createPost = async (req, res) => {
   logger.info("Create Post endpoint hit...");
@@ -31,6 +24,15 @@ const createPost = async (req, res) => {
       mediaIds: mediaIds || [],
     });
     await newlyCreatedPost.save();
+
+    await publishEvent("post.created", {
+      postId: newlyCreatedPost._id.toString(),
+      userId: newlyCreatedPost.user.toString(),
+      title: newlyCreatedPost.title,
+      content: newlyCreatedPost.content,
+      createdAt: newlyCreatedPost.createdAt,
+    });
+
     await invalidatePostCache(req, null);
     logger.info("Post created successfully", newlyCreatedPost);
     res.status(201).json({
@@ -143,16 +145,12 @@ const deletePost = async (req, res) => {
     // Delete the post
     await Post.findByIdAndDelete(postId);
 
-
     //publish post delete method ->
-    await publishEvent('post.deleted',
-      {
-        postId:post._id.toString(),
-        userId:req.user.userId,
-        mediaIds:post.mediaIds
-
-      }
-    )
+    await publishEvent("post.deleted", {
+      postId: post._id.toString(),
+      userId: req.user.userId,
+      mediaIds: post.mediaIds,
+    });
 
     // Invalidate cache to ensure consistency
     await invalidatePostCache(req, postId);
